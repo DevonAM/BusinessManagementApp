@@ -1,0 +1,26 @@
+[
+  {
+    "firstName": "Luke",
+    "lastName": "Skywalker",
+    "address": "123 Planet Naboo, Sector 123",
+    "poolSize": 123,
+    "filterType": "Sand",
+    "serviceHistory": {
+      "lastDrainDate": "none",
+      "lastFilterServiceDate": "none"
+    },
+    "id": 123456789.1234
+  },
+  {
+    "firstName": "Leah",
+    "lastName": "Skywalker",
+    "address": "123 Planet Naboo, Sector 123",
+    "poolSize": 123,
+    "filterType": "Sand",
+    "serviceHistory": {
+      "lastDrainDate": "none",
+      "lastFilterServiceDate": "none"
+    },
+    "id": 123456789.0001
+  }
+]
