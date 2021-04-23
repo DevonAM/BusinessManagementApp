@@ -36,12 +36,12 @@ function writeCustomers(newObj) {
   customers = JSON.parse(fs.readFileSync(cF));
   let found = false;
   //check if customer already exists
-  customers.forEach((e) => {
-    if (e.id == newObj) {
-      e = newObj;
+  for (let i = 0; i < customers.length; i++) {
+    if (customers[i].id == newObj.id) {
+      customers[i] = newObj;
       found = true;
     }
-  });
+  }
   //if the customer wasn't found, then add.
   if (!found) {
     customers.push(newObj);
