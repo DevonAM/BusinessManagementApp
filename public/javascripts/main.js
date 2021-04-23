@@ -108,15 +108,32 @@ sendEdit = (obj) => {
   return req;
 };
 
-onEditSubmit = () => {
+onEditSubmit = (id) => {
   let x = document.getElementById("edit_form").getElementsByTagName("input");
-  let obj = {
-    firstName: x["firstName"].value,
-    lastName: x["lastName"].value,
-    poolSize: x["poolSize"].value,
-    filterType: x["filterType"].value,
-  };
-  sendEdit(obj);
+  let cs = JSON.parse(window.sessionStorage.getItem("customers"));
+  let c;
+
+  //find the customer in the collection
+  cs.forEach((e) => {
+    if ((e.id = id)) {
+      c = e;
+    }
+  });
+
+  c.firstName = x["firstName"].value;
+  c.lastName = x["lastName"].value;
+  c.poolSize = x["poolSize"].value;
+  c.filterType = x["filterType"].value;
+  c.serviceHistory = c.serviceHistory;
+  //   let obj = {
+  //     firstName: ,
+  //     lastName: x["lastName"].value,
+  //     poolSize: x["poolSize"].value,
+  //     filterType: x["filterType"].value,
+  //     serviceHistory: c.serviceHistory,
+  //     id: c.id,
+  //   };
+  sendEdit(c);
 };
 
 editHelper = (customer) => {
@@ -139,7 +156,9 @@ editHelper = (customer) => {
     customer.filterType +
     '">' +
     "</div>" +
-    '<button class="ui button" type="button" onclick="onEditSubmit()">Edit</button>';
+    '<button class="ui button" type="button" onclick="onEditSubmit(\'' +
+    customer.id +
+    "')\">Edit</button>";
   s += "</form></div></div></div>";
 
   return s;
