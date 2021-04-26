@@ -156,12 +156,58 @@ editHelper = (customer) => {
     customer.filterType +
     '">' +
     "</div>" +
+    "<div>" +
     '<button class="ui button" type="button" onclick="onEditSubmit(\'' +
     customer.id +
-    "')\">Edit</button>";
-  s += "</form></div></div></div>";
+    "')\">Edit</button>" +
+    '<button class="ui negative button" type="button" onclick="onDeleteClicked(\'' +
+    customer.id +
+    "')\">Delete</button>" +
+    "</div>";
+  s += "</form></div></div>";
 
   return s;
+};
+
+onDeleteClicked = (id) => {
+  //send delete
+  let c = {};
+  let cs = JSON.parse(window.sessionStorage.getItem("customers"));
+  //find the customer in the collection
+  cs.forEach((e) => {
+    if (e.id == id) {
+      c = e;
+    }
+  });
+
+  let bodyStr = JSON.stringify(c);
+  //create request for a post
+  let req = new XMLHttpRequest();
+  req.open("DELETE", "/");
+  req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  req.onreadystatechange = function () {
+    if (req.readyState === 4) {
+      console.log("State: " + req.readyState);
+      if (req.status === 200) {
+        //get the response
+        let customers = JSON.parse(req.responseText);
+        //assign it to session storage
+        window.sessionStorage.setItem("customers", JSON.stringify(customers));
+
+        //refresh the table
+        fillTable(customers);
+
+        // close the modal
+        var modal = document.getElementById("myModal");
+        modal.style.display = "none";
+      } else {
+        // document.getElementById("response").innerHTML =
+        //   "Error retrieving response from server"; TODO
+      }
+    }
+  };
+  req.send(bodyStr);
+  return req;
 };
 
 onEditClick = (id) => {
