@@ -1,43 +1,111 @@
 onAddClick = () => {
   loadAddPage();
-  let bodyStr = "";
+};
+
+loadHome = () => {};
+
+loadAddPage = () => {
+  var modal = document.getElementById("myModal");
+  var content = document.getElementById("main_modal_content");
+  content.innerHTML = "";
+
+  let s =
+    '<div class="sixteen wide mobile thirteen wide tablet thirteen wide computer right floated column" id="content"> <div class="ui padded grid"> <div class="row"> <h1 class="ui huge dividing header">Add New Customer</h1> </div>' +
+    '<form id="add_cust_form" class="ui form">' +
+    '<div class="field"> <label>First Name</label> <input required type="text" name="firstName" placeholder="First Name">' +
+    "</div>" +
+    '<div class="field"> <label>Last Name</label> <input required type="text" name="lastName" placeholder="Last Name">' +
+    "</div>" +
+    '<div class="field"> <label>Address</label> <input required type="text" name="address" placeholder="1234 W. 5th St. Paradise, ST 85012">' +
+    "</div>" +
+    '<div class="field"> <label># Gallons</label> <input type="number" name="poolSize" placeholder="12345">' +
+    "</div>" +
+    '<div class="field"> <label>Filter Type</label> <input type="test" name="filterType" placeholder="sand">' +
+    "</div>" +
+    '<button class="ui button" type="button" onclick="addSubmitted()">Add</button>' +
+    "</form></div></div>";
+
+  // content.innerHTML = s;
+  // modal.style.display = "block";
+
+  let x = "";
+  x = document.getElementById("content").innerHTML;
+  window.sessionStorage.setItem("home", x);
+  document.getElementById("content").innerHTML = s;
+};
+
+addSubmitted = () => {
+  let x = document
+    .getElementById("add_cust_form")
+    .getElementsByTagName("input");
+  if (
+    x["firstName"].value == "" ||
+    x["lastName"].value == "" ||
+    x["poolSize"].value == "" ||
+    x["filterType"].value == "" ||
+    x["address"].value == ""
+  ) {
+    alert("Please complete all the fields");
+  } else {
+    let cs = JSON.parse(window.sessionStorage.getItem("customers"));
+    let c = {};
+    let found = false;
+
+    //determine if the stuomer already exists
+    cs.forEach((e) => {
+      if (
+        e.firstName == x["firstName"].value &&
+        e.lastName == x["lastName"].value
+      ) {
+        alert("A customer with that information already exists");
+        found = true;
+      }
+    });
+    if (!found) {
+      c.firstName = x["firstName"].value;
+      c.lastName = x["lastName"].value;
+      c.address = x["address"].value;
+      c.poolSize = x["poolSize"].value;
+      c.filterType = x["filterType"].value;
+      c.serviceHistory = {
+        lastDrainDate: "none",
+        lastFilterServiceDate: "none",
+      };
+      sendAdd(c);
+    }
+  }
+};
+
+//send the POST request for an add
+sendAdd = (obj) => {
+  let bodyStr = JSON.stringify(obj);
+  //create request for a post
   let req = new XMLHttpRequest();
-  req.open("GET", "/add");
+  req.open("POST", "/add");
   req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   req.onreadystatechange = function () {
     if (req.readyState === 4) {
       console.log("State: " + req.readyState);
       if (req.status === 200) {
-        // document.getElementById("results").innerText = req.responseText;
-        // document.getElementById("reset_btn").disabled = false;
-        //TODO
+        //should have recieved updated customers list
+        // console.log(req.responseText);
+        let customers = JSON.parse(req.responseText);
+        window.sessionStorage.setItem("customers", JSON.stringify(customers));
+        let x = document.getElementById("content");
+        x.innerHTML = window.sessionStorage.getItem("home");
+        fillTable(customers);
+
+        //close the modal
+        // var modal = document.getElementById("myModal");
+        // modal.style.display = "none";
       } else {
         // document.getElementById("response").innerHTML =
-        //   "Error retrieving response from server";
+        //   "Error retrieving response from server"; TODO
       }
     }
   };
   req.send(bodyStr);
   return req;
-};
-
-loadAddPage = () => {
-  let s =
-    '<div class="sixteen wide mobile thirteen wide tablet thirteen wide computer right floated column" id="content"> <div class="ui padded grid"> <div class="row"> <h1 class="ui huge dividing header">Add New Customer</h1> </div>' +
-    '<form id="add_cust_form" class="ui form">' +
-    '<div class="field"> <label>First Name</label> <input required type="text" name="first-name" placeholder=" First Name">' +
-    "</div>" +
-    '<div class="field"> <label>Last Name</label> <input required type="text" name="last-name" placeholder="Last Name">' +
-    "</div>" +
-    '<div class="field"> <label># Gallons</label> <input type="number" name="pool-size" placeholder="12345">' +
-    "</div>" +
-    '<button class="ui button" type="button" onclick="addClicked()">Add</button>' +
-    "</form></div></div>";
-  document.getElementById("content").innerHTML = s;
-};
-
-addClicked = () => {
-  document.getElementById("add_cust_form");
 };
 
 historyHelper = (history) => {
@@ -96,8 +164,12 @@ sendEdit = (obj) => {
         // console.log(req.responseText);
         let customers = JSON.parse(req.responseText);
         window.sessionStorage.setItem("customers", JSON.stringify(customers));
-        getCustomers();
+        // getCustomers();
         fillTable(customers);
+
+        //close the modal
+        var modal = document.getElementById("myModal");
+        modal.style.display = "none";
       } else {
         // document.getElementById("response").innerHTML =
         //   "Error retrieving response from server";
@@ -110,30 +182,38 @@ sendEdit = (obj) => {
 
 onEditSubmit = (id) => {
   let x = document.getElementById("edit_form").getElementsByTagName("input");
-  let cs = JSON.parse(window.sessionStorage.getItem("customers"));
-  let c;
+  if (
+    x["firstName"].value == "" ||
+    x["lastName"].value == "" ||
+    x["poolSize"].value == "" ||
+    x["filterType"].value == ""
+  ) {
+  } else {
+    let cs = JSON.parse(window.sessionStorage.getItem("customers"));
+    let c;
 
-  //find the customer in the collection
-  cs.forEach((e) => {
-    if ((e.id = id)) {
-      c = e;
-    }
-  });
+    //find the customer in the collection
+    cs.forEach((e) => {
+      if ((e.id = id)) {
+        c = e;
+      }
+    });
 
-  c.firstName = x["firstName"].value;
-  c.lastName = x["lastName"].value;
-  c.poolSize = x["poolSize"].value;
-  c.filterType = x["filterType"].value;
-  c.serviceHistory = c.serviceHistory;
-  //   let obj = {
-  //     firstName: ,
-  //     lastName: x["lastName"].value,
-  //     poolSize: x["poolSize"].value,
-  //     filterType: x["filterType"].value,
-  //     serviceHistory: c.serviceHistory,
-  //     id: c.id,
-  //   };
-  sendEdit(c);
+    c.firstName = x["firstName"].value;
+    c.lastName = x["lastName"].value;
+    c.poolSize = x["poolSize"].value;
+    c.filterType = x["filterType"].value;
+    c.serviceHistory = c.serviceHistory;
+    //   let obj = {
+    //     firstName: ,
+    //     lastName: x["lastName"].value,
+    //     poolSize: x["poolSize"].value,
+    //     filterType: x["filterType"].value,
+    //     serviceHistory: c.serviceHistory,
+    //     id: c.id,
+    //   };
+    sendEdit(c);
+  }
 };
 
 editHelper = (customer) => {
@@ -276,7 +356,6 @@ function getCustomers() {
     if (req.readyState === 4) {
       console.log("State: " + req.readyState);
       if (req.status === 200) {
-        console.log(req.responseText);
         let customers = JSON.parse(req.responseText);
         window.sessionStorage.setItem("customers", JSON.stringify(customers));
         fillTable(customers);
