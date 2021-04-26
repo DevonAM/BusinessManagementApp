@@ -1,8 +1,20 @@
+/**
+ * @author Devon Acree-Meza
+ * @description A business customer management web application.
+ * @version 1.0 April
+ */
+
 onAddClick = () => {
   loadAddPage();
 };
 
-loadHome = () => {};
+loadHome = () => {
+  //show the home page that was stored in session
+  let x = document.getElementById("content");
+  x.innerHTML = window.sessionStorage.getItem("home");
+  //refresh the table
+  fillTable(JSON.parse(window.sessionStorage.getItem("customers")));
+};
 
 loadAddPage = () => {
   var modal = document.getElementById("myModal");
@@ -24,9 +36,6 @@ loadAddPage = () => {
     "</div>" +
     '<button class="ui button" type="button" onclick="addSubmitted()">Add</button>' +
     "</form></div></div>";
-
-  // content.innerHTML = s;
-  // modal.style.display = "block";
 
   let x = "";
   x = document.getElementById("content").innerHTML;
@@ -87,17 +96,14 @@ sendAdd = (obj) => {
     if (req.readyState === 4) {
       console.log("State: " + req.readyState);
       if (req.status === 200) {
-        //should have recieved updated customers list
-        // console.log(req.responseText);
+        //store the new collection to session
         let customers = JSON.parse(req.responseText);
         window.sessionStorage.setItem("customers", JSON.stringify(customers));
+        //show the home page
         let x = document.getElementById("content");
         x.innerHTML = window.sessionStorage.getItem("home");
+        //refresh the table
         fillTable(customers);
-
-        //close the modal
-        // var modal = document.getElementById("myModal");
-        // modal.style.display = "none";
       } else {
         // document.getElementById("response").innerHTML =
         //   "Error retrieving response from server"; TODO
@@ -149,7 +155,6 @@ showServiceHistory = (id) => {
   content.innerHTML = s;
 };
 
-//edit has be requested
 sendEdit = (obj) => {
   let bodyStr = JSON.stringify(obj);
   //create request for a post
@@ -160,19 +165,17 @@ sendEdit = (obj) => {
     if (req.readyState === 4) {
       console.log("State: " + req.readyState);
       if (req.status === 200) {
-        //should have recieved updated customers list
-        // console.log(req.responseText);
+        //store the customer collection into session storage
         let customers = JSON.parse(req.responseText);
         window.sessionStorage.setItem("customers", JSON.stringify(customers));
-        // getCustomers();
+        //refresh the table
         fillTable(customers);
-
         //close the modal
         var modal = document.getElementById("myModal");
         modal.style.display = "none";
       } else {
         // document.getElementById("response").innerHTML =
-        //   "Error retrieving response from server";
+        //   "Error retrieving response from server"; TODO
       }
     }
   };
@@ -204,14 +207,7 @@ onEditSubmit = (id) => {
     c.poolSize = x["poolSize"].value;
     c.filterType = x["filterType"].value;
     c.serviceHistory = c.serviceHistory;
-    //   let obj = {
-    //     firstName: ,
-    //     lastName: x["lastName"].value,
-    //     poolSize: x["poolSize"].value,
-    //     filterType: x["filterType"].value,
-    //     serviceHistory: c.serviceHistory,
-    //     id: c.id,
-    //   };
+
     sendEdit(c);
   }
 };
@@ -260,6 +256,7 @@ onDeleteClicked = (id) => {
     }
   });
 
+  console.log("trying to delete %o", c);
   let bodyStr = JSON.stringify(c);
   //create request for a post
   let req = new XMLHttpRequest();

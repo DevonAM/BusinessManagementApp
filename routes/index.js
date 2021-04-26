@@ -4,6 +4,12 @@ var fs = require("fs");
 var cF = "./data/customers.json";
 var customers = JSON.parse(fs.readFileSync(cF));
 
+/**
+ * @author Devon Acree-Meza
+ * @description The main route
+ * @version 1.0 April
+ */
+
 /* GET home page. */
 router.get("/", function (req, res, next) {
   res.render("index", { data: {} });
@@ -16,30 +22,19 @@ router.get("/customerData", function (req, res, next) {
 
 /* POST an edited customer. */
 router.post("/edit", function (req, res, next) {
-  // res.send(JSON.stringify(customers));
-  // console.log(JSON.parse(req.body));
-
-  //had to get this hacky becuase req.body was giving
-  // [Object: null prototype] {
-  //   '{"firstName":"Leah","lastName":" Skywalker","poolSize":"123","filterType":"Sand"}': ''
-  // }
   let edited = JSON.parse(Object.keys(req.body)[0]);
 
   writeCustomers(edited);
+
   //send updated customers list
   res.send(JSON.stringify(customers));
 });
 
 /* POST a new customer. */
 router.post("/add", function (req, res, next) {
-  // res.send(JSON.stringify(customers));
-  // console.log(JSON.parse(req.body));
-  //had to get this hacky becuase req.body was giving
-  // [Object: null prototype] {
-  //   '{"firstName":"Leah","lastName":" Skywalker","poolSize":"123","filterType":"Sand"}': ''
-  // }
+  //Create object from the req.body
   let newObj = JSON.parse(Object.keys(req.body)[0]);
-
+  //write new customer to file
   writeCustomers(newObj);
   //send updated customers list
   res.send(JSON.stringify(customers));
@@ -49,7 +44,6 @@ router.post("/add", function (req, res, next) {
 router.delete("/", (req, res, next) => {
   //use the hacky way to get the object to delete
   let objToDel = JSON.parse(Object.keys(req.body)[0]);
-
   //refresh the collection
   customers = JSON.parse(fs.readFileSync(cF));
 
@@ -57,7 +51,7 @@ router.delete("/", (req, res, next) => {
   //find the customer to delete
   for (let i = 0; i < customers.length; i++) {
     if (customers[i].id == objToDel.id) {
-      customers.splice(customers[i], 1);
+      customers.splice(i, 1);
       found = true;
     }
   }

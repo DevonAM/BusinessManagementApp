@@ -4,6 +4,12 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 
+/**
+ * @author Devon Acree-Meza
+ * @description A server for the business customer management web application.
+ * @version 1.0 April
+ */
+
 var indexRouter = require("./routes/index");
 // var usersRouter = require('./routes/users');
 
