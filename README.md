@@ -1,7 +1,6 @@
 # Pool Business Manager
 *By Devon Acree-Meza
 
-# Browse Community Service overview
 The application is built from Express and NodeJS. WIth the use of JSON file reading/writing to maintain world state. Semantic UI for frontend UI. 
 
 # Demonstrations
