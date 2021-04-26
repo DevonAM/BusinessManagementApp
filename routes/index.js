@@ -45,22 +45,31 @@ router.post("/add", function (req, res, next) {
   res.send(JSON.stringify(customers));
 });
 function writeCustomers(newObj) {
-  newObj.id = parseFloat(newObj.id);
   newObj.poolSize = parseFloat(newObj.poolSize);
   customers = JSON.parse(fs.readFileSync(cF));
   let found = false;
   //check if customer already exists
   for (let i = 0; i < customers.length; i++) {
     if (customers[i].id == newObj.id) {
+
       customers[i] = newObj;
       found = true;
     }
   }
   //if the customer wasn't found, then add.
   if (!found) {
+    newObj.id = create_UUID();
     customers.push(newObj);
   }
   fs.writeFileSync(cF, JSON.stringify(customers));
 }
+
+create_UUID = () => {
+  var dt = new Date().getTime();
+  var uuid = "yyyyyyyyy.yyyy".replace(/[y]/g, function (c) {
+    return Math.floor(Math.random() * Math.floor(10));
+  });
+  return uuid;
+};
 
 module.exports = router;
