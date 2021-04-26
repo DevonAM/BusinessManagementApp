@@ -44,6 +44,30 @@ router.post("/add", function (req, res, next) {
   //send updated customers list
   res.send(JSON.stringify(customers));
 });
+
+/* POST delete a customer */
+router.delete("/", (req, res, next) => {
+  //use the hacky way to get the object to delete
+  let objToDel = JSON.parse(Object.keys(req.body)[0]);
+
+  //refresh the collection
+  customers = JSON.parse(fs.readFileSync(cF));
+
+  let found = false;
+  //find the customer to delete
+  for (let i = 0; i < customers.length; i++) {
+    if (customers[i].id == objToDel.id) {
+      customers.splice(customers[i], 1);
+      found = true;
+    }
+  }
+  //write the collection to file
+  fs.writeFileSync(cF, JSON.stringify(customers));
+
+  //send updated customers list
+  res.send(JSON.stringify(customers));
+});
+
 function writeCustomers(newObj) {
   newObj.poolSize = parseFloat(newObj.poolSize);
   customers = JSON.parse(fs.readFileSync(cF));
@@ -51,6 +75,7 @@ function writeCustomers(newObj) {
   //check if customer already exists
   for (let i = 0; i < customers.length; i++) {
     if (customers[i].id == newObj.id) {
+      newObj.id = parseFloat(newObj.id);
 
       customers[i] = newObj;
       found = true;
