@@ -30,6 +30,20 @@ router.post("/edit", function (req, res, next) {
   res.send(JSON.stringify(customers));
 });
 
+/* POST a new customer. */
+router.post("/add", function (req, res, next) {
+  // res.send(JSON.stringify(customers));
+  // console.log(JSON.parse(req.body));
+  //had to get this hacky becuase req.body was giving
+  // [Object: null prototype] {
+  //   '{"firstName":"Leah","lastName":" Skywalker","poolSize":"123","filterType":"Sand"}': ''
+  // }
+  let newObj = JSON.parse(Object.keys(req.body)[0]);
+
+  writeCustomers(newObj);
+  //send updated customers list
+  res.send(JSON.stringify(customers));
+});
 function writeCustomers(newObj) {
   newObj.id = parseFloat(newObj.id);
   newObj.poolSize = parseFloat(newObj.poolSize);
