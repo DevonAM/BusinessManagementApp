@@ -372,4 +372,8 @@ function getCustomers() {
   return req;
 }
 
+searchClicked = () => {
+  console.log("A search was initiated");
+};
+
 getCustomers();
