@@ -94,7 +94,6 @@ sendAdd = (obj) => {
   req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   req.onreadystatechange = function () {
     if (req.readyState === 4) {
-      console.log("State: " + req.readyState);
       if (req.status === 200) {
         //store the new collection to session
         let customers = JSON.parse(req.responseText);
@@ -163,7 +162,6 @@ sendEdit = (obj) => {
   req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   req.onreadystatechange = function () {
     if (req.readyState === 4) {
-      console.log("State: " + req.readyState);
       if (req.status === 200) {
         //store the customer collection into session storage
         let customers = JSON.parse(req.responseText);
@@ -262,7 +260,6 @@ onDeleteClicked = (id) => {
     }
   });
 
-  console.log("trying to delete %o", c);
   let bodyStr = JSON.stringify(c);
   //create request for a post
   let req = new XMLHttpRequest();
@@ -270,7 +267,6 @@ onDeleteClicked = (id) => {
   req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   req.onreadystatechange = function () {
     if (req.readyState === 4) {
-      console.log("State: " + req.readyState);
       if (req.status === 200) {
         //get the response
         let customers = JSON.parse(req.responseText);
@@ -357,7 +353,6 @@ function getCustomers() {
   req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   req.onreadystatechange = function () {
     if (req.readyState === 4) {
-      console.log("State: " + req.readyState);
       if (req.status === 200) {
         let customers = JSON.parse(req.responseText);
         window.sessionStorage.setItem("customers", JSON.stringify(customers));
@@ -378,9 +373,6 @@ searchClicked = () => {
   if (input == "") {
     alert("Please enter a first or last name into the search");
   } else {
-    // let bodyStr = JSON.stringify(input);
-    // console.log("searching for %o", bodyStr);
-
     //create a new request
     let req = new XMLHttpRequest();
     req.open("GET", "/search/" + input);

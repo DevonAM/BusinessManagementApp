@@ -42,25 +42,19 @@ router.post("/add", function (req, res, next) {
 
 /* GET a list of searched customers */
 router.get("/search/:name", (req, res, next) => {
-  console.log("check0");
-
   //get the search term
   let searchTerm = req.params.name;
-
   //if first and last name were entered get both.
   let terms = searchTerm.split(" ");
   let results = [];
   let found = false;
-  console.log("check1");
   //iterate customers
   for (let i = 0; i < customers.length; i++) {
-    console.log("check2");
     //put the index customer names into an array
     let names = [
       customers[i].firstName.toLowerCase(),
       customers[i].lastName.toLowerCase(),
     ];
-    console.log("check4");
 
     //check for matches
     if (terms[1]) {
@@ -69,7 +63,6 @@ router.get("/search/:name", (req, res, next) => {
         names.includes(terms[1].toLowerCase())
       ) {
         //found a match
-        console.log("found a match %o", customer[i]);
         results.push(customers[i]);
         found = true;
       }
