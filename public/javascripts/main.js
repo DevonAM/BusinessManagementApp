@@ -189,7 +189,8 @@ onEditSubmit = (id) => {
     x["firstName"].value == "" ||
     x["lastName"].value == "" ||
     x["poolSize"].value == "" ||
-    x["filterType"].value == ""
+    x["filterType"].value == "" ||
+    x["address"].value == ""
   ) {
   } else {
     let cs = JSON.parse(window.sessionStorage.getItem("customers"));
@@ -206,6 +207,7 @@ onEditSubmit = (id) => {
     c.lastName = x["lastName"].value;
     c.poolSize = x["poolSize"].value;
     c.filterType = x["filterType"].value;
+    c.address = x["address"].value;
     c.serviceHistory = c.serviceHistory;
 
     sendEdit(c);
@@ -222,6 +224,10 @@ editHelper = (customer) => {
     "</div>" +
     '<div class="field"> <label>Last Name</label> <input required type="text" name="lastName" value=" ' +
     customer.lastName +
+    '">' +
+    "</div>" +
+    '<div class="field"> <label>Address</label> <input required type="text" name="address" value=" ' +
+    customer.address +
     '">' +
     "</div>" +
     '<div class="field"> <label>Pool Size</label> <input type="number" name="poolSize" value="' +
