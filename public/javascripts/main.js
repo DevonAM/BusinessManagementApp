@@ -373,7 +373,34 @@ function getCustomers() {
 }
 
 searchClicked = () => {
-  console.log("A search was initiated");
+  let input = document.getElementById("search_input").value;
+
+  if (input == "") {
+    alert("Please enter a first or last name into the search");
+  } else {
+    // let bodyStr = JSON.stringify(input);
+    // console.log("searching for %o", bodyStr);
+
+    //create a new request
+    let req = new XMLHttpRequest();
+    req.open("GET", "/search/" + input);
+    req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    req.onreadystatechange = function () {
+      if (req.readyState === 4) {
+        if (req.status === 200) {
+          //get the response
+          let res = JSON.parse(req.responseText);
+          //assign it to session storage
+          // window.sessionStorage.setItem("customers", JSON.stringify(customers));
+        } else {
+          // document.getElementById("response").innerHTML =
+          //   "Error retrieving response from server"; TODO
+        }
+      }
+    };
+    req.send();
+    return req;
+  }
 };
 
 getCustomers();
