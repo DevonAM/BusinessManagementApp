@@ -40,6 +40,55 @@ router.post("/add", function (req, res, next) {
   res.send(JSON.stringify(customers));
 });
 
+/* GET a list of searched customers */
+router.get("/search/:name", (req, res, next) => {
+  console.log("check0");
+
+  //get the search term
+  let searchTerm = req.params.name;
+
+  //if first and last name were entered get both.
+  let terms = searchTerm.split(" ");
+  let results = [];
+  let found = false;
+  console.log("check1");
+  //iterate customers
+  for (let i = 0; i < customers.length; i++) {
+    console.log("check2");
+    //put the index customer names into an array
+    let names = [
+      customers[i].firstName.toLowerCase(),
+      customers[i].lastName.toLowerCase(),
+    ];
+    console.log("check4");
+
+    //check for matches
+    if (terms[1]) {
+      if (
+        names.includes(terms[0].toLowerCase()) ||
+        names.includes(terms[1].toLowerCase())
+      ) {
+        //found a match
+        console.log("found a match %o", customer[i]);
+        results.push(customers[i]);
+        found = true;
+      }
+    } else {
+      if (names.includes(terms[0].toLowerCase())) {
+        //found a match
+        results.push(customers[i]);
+        found = true;
+      }
+    }
+  }
+
+  if (found) {
+    res.send(JSON.stringify(results));
+  } else {
+    res.status(404, "Could not find the customer");
+  }
+});
+
 /* POST delete a customer */
 router.delete("/", (req, res, next) => {
   //use the hacky way to get the object to delete
