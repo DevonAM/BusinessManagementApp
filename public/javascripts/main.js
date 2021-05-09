@@ -382,11 +382,14 @@ searchClicked = () => {
         if (req.status === 200) {
           //get the response
           let res = JSON.parse(req.responseText);
+          document.getElementById("header-label").innerText = "Results";
+          fillTable(res);
           //assign it to session storage
           // window.sessionStorage.setItem("customers", JSON.stringify(customers));
         } else {
           // document.getElementById("response").innerHTML =
           //   "Error retrieving response from server"; TODO
+          alert("The name used to search was not found.");
         }
       }
     };

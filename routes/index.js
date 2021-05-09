@@ -78,7 +78,7 @@ router.get("/search/:name", (req, res, next) => {
   if (found) {
     res.send(JSON.stringify(results));
   } else {
-    res.status(404, "Could not find the customer");
+    res.sendStatus(404, "Could not find the customer");
   }
 });
 
