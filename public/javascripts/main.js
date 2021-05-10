@@ -91,7 +91,7 @@ sendAdd = (obj) => {
   //create request for a post
   let req = new XMLHttpRequest();
   req.open("POST", "/add");
-  req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  req.setRequestHeader("Content-type", "application/json");
   req.onreadystatechange = function () {
     if (req.readyState === 4) {
       if (req.status === 200) {
@@ -159,7 +159,7 @@ sendEdit = (obj) => {
   //create request for a post
   let req = new XMLHttpRequest();
   req.open("POST", "/edit");
-  req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  req.setRequestHeader("Content-type", "application/json");
   req.onreadystatechange = function () {
     if (req.readyState === 4) {
       if (req.status === 200) {
@@ -264,7 +264,7 @@ onDeleteClicked = (id) => {
   //create request for a post
   let req = new XMLHttpRequest();
   req.open("DELETE", "/");
-  req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  req.setRequestHeader("Content-type", "application/json");
   req.onreadystatechange = function () {
     if (req.readyState === 4) {
       if (req.status === 200) {
@@ -350,7 +350,7 @@ function getCustomers() {
   let bodyStr = "";
   let req = new XMLHttpRequest();
   req.open("GET", "/customerData");
-  req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  req.setRequestHeader("Content-type", "application/json");
   req.onreadystatechange = function () {
     if (req.readyState === 4) {
       if (req.status === 200) {
@@ -376,7 +376,7 @@ searchClicked = () => {
     //create a new request
     let req = new XMLHttpRequest();
     req.open("GET", "/search/" + input);
-    req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    req.setRequestHeader("Content-type", "application/json");
     req.onreadystatechange = function () {
       if (req.readyState === 4) {
         if (req.status === 200) {
