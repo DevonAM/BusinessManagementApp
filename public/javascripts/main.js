@@ -346,25 +346,17 @@ fillTable = (customers) => {
   });
 };
 
-function getCustomers() {
-  let bodyStr = "";
-  let req = new XMLHttpRequest();
-  req.open("GET", "/customerData");
-  req.setRequestHeader("Content-type", "application/json");
-  req.onreadystatechange = function () {
-    if (req.readyState === 4) {
-      if (req.status === 200) {
-        let customers = JSON.parse(req.responseText);
-        window.sessionStorage.setItem("customers", JSON.stringify(customers));
-        fillTable(customers);
-      } else {
-        // document.getElementById("response").innerHTML =
-        //   "Error retrieving response from server";
-      }
-    }
-  };
-  req.send(bodyStr);
-  return req;
+async function getCustomers() {
+  let promise = await fetch("http://localhost:8080/customerData", {
+    method: "GET",
+    headers: { "Content-type": "application/json" },
+  })
+    .then((res) => res.json())
+    .then((customers) => {
+      window.sessionStorage.setItem("customers", customersJson);
+      fillTable(customers);
+    })
+    .catch((err) => console.log(err));
 }
 
 searchClicked = () => {
