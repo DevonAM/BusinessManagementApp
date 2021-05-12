@@ -353,41 +353,45 @@ async function getCustomers() {
   })
     .then((res) => res.json())
     .then((customers) => {
-      window.sessionStorage.setItem("customers", customersJson);
+      window.sessionStorage.setItem("customers", customers);
       fillTable(customers);
     })
     .catch((err) => console.log(err));
 }
 
-searchClicked = () => {
+async function searchClicked() {
   let input = document.getElementById("search_input").value;
 
   if (input == "") {
     alert("Please enter a first or last name into the search");
   } else {
+    let promise = await fetch("http://localhost:8080/search/" + input)
+      .then((res) => res.json())
+      .then((json) => console.log(json))
+      .catch((err) => console.log(err));
     //create a new request
-    let req = new XMLHttpRequest();
-    req.open("GET", "/search/" + input);
-    req.setRequestHeader("Content-type", "application/json");
-    req.onreadystatechange = function () {
-      if (req.readyState === 4) {
-        if (req.status === 200) {
-          //get the response
-          let res = JSON.parse(req.responseText);
-          document.getElementById("header-label").innerText = "Results";
-          fillTable(res);
-          //assign it to session storage
-          // window.sessionStorage.setItem("customers", JSON.stringify(customers));
-        } else {
-          // document.getElementById("response").innerHTML =
-          //   "Error retrieving response from server"; TODO
-          alert("The name used to search was not found.");
-        }
-      }
-    };
-    req.send();
-    return req;
+    //   let req = new XMLHttpRequest();
+    //   req.open("GET", "/search/" + input);
+    //   req.setRequestHeader("Content-type", "application/json");
+    //   req.onreadystatechange = function () {
+    //     if (req.readyState === 4) {
+    //       if (req.status === 200) {
+    //         //get the response
+    //         let res = JSON.parse(req.responseText);
+    //         document.getElementById("header-label").innerText = "Results";
+    //         fillTable(res);
+    //         //assign it to session storage
+    //         // window.sessionStorage.setItem("customers", JSON.stringify(customers));
+    //       } else {
+    //         // document.getElementById("response").innerHTML =
+    //         //   "Error retrieving response from server"; TODO
+    //         alert("The name used to search was not found.");
+    //       }
+    //     }
+    //   };
+    //   req.send();
+    //   return req;
   }
-};
+}
 
 getCustomers();
