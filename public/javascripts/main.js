@@ -255,7 +255,7 @@ editHelper = (customer) => {
   return s;
 };
 
-onDeleteClicked = (id) => {
+async function onDeleteClicked(id) {
   //send delete
   let c = {};
   let cs = JSON.parse(window.sessionStorage.getItem("customers"));
@@ -267,33 +267,25 @@ onDeleteClicked = (id) => {
   });
 
   let bodyStr = JSON.stringify(c);
-  //create request for a post
-  let req = new XMLHttpRequest();
-  req.open("DELETE", "/");
-  req.setRequestHeader("Content-type", "application/json");
-  req.onreadystatechange = function () {
-    if (req.readyState === 4) {
-      if (req.status === 200) {
-        //get the response
-        let customers = JSON.parse(req.responseText);
-        //assign it to session storage
-        window.sessionStorage.setItem("customers", JSON.stringify(customers));
 
-        //refresh the table
-        fillTable(customers);
+  let promise = await fetch(url, {
+    method: "DELETE",
+    headers: { "Content-type": "application/json" },
+    body: bodyStr,
+  })
+    .then((res) => res.json())
+    .then((customers) => {
+      window.sessionStorage.setItem("customers", JSON.stringify(customers));
+      console.log(customers);
+      //refresh the table
+      fillTable(customers);
 
-        // close the modal
-        var modal = document.getElementById("myModal");
-        modal.style.display = "none";
-      } else {
-        // document.getElementById("response").innerHTML =
-        //   "Error retrieving response from server"; TODO
-      }
-    }
-  };
-  req.send(bodyStr);
-  return req;
-};
+      // close the modal
+      var modal = document.getElementById("myModal");
+      modal.style.display = "none";
+    })
+    .catch((err) => console.log(err));
+}
 
 onEditClick = (id) => {
   var modal = document.getElementById("myModal");
