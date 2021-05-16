@@ -345,13 +345,10 @@ fillTable = (customers) => {
 };
 
 async function getCustomers() {
-  let promise = await fetch("http://localhost:8080/customerData", {
-    method: "GET",
-    headers: { "Content-type": "application/json" },
-  })
+  let promise = await fetch(url + "customerData", reqOb)
     .then((res) => res.json())
     .then((customers) => {
-      window.sessionStorage.setItem("customers", customers);
+      window.sessionStorage.setItem("customers", JSON.stringify(customers));
       fillTable(customers);
     })
     .catch((err) => console.log(err));
@@ -362,7 +359,7 @@ async function searchClicked() {
   if (input == "") {
     alert("Please enter a first or last name into the search");
   } else {
-    let promise = await fetch("http://localhost:8080/search/" + input)
+    let promise = await fetch(url + "search/" + input, reqOb)
       .then((res) => res.json())
       .then((results) => {
         document.getElementById("header-label").innerText = "Results";
