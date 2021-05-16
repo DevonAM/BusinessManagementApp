@@ -22,7 +22,7 @@ router.get("/customerData", function (req, res, next) {
 
 /* POST an edited customer. */
 router.post("/edit", function (req, res, next) {
-  let edited = JSON.parse(Object.keys(req.body)[0]);
+  let edited = req.body; //JSON.parse(Object.keys(req.body)[0]);
 
   writeCustomers(edited);
 

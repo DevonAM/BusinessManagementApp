@@ -160,32 +160,24 @@ showServiceHistory = (id) => {
   content.innerHTML = s;
 };
 
-sendEdit = (obj) => {
+async function sendEdit(obj) {
   let bodyStr = JSON.stringify(obj);
-  //create request for a post
-  let req = new XMLHttpRequest();
-  req.open("POST", "/edit");
-  req.setRequestHeader("Content-type", "application/json");
-  req.onreadystatechange = function () {
-    if (req.readyState === 4) {
-      if (req.status === 200) {
-        //store the customer collection into session storage
-        let customers = JSON.parse(req.responseText);
-        window.sessionStorage.setItem("customers", JSON.stringify(customers));
-        //refresh the table
-        fillTable(customers);
-        //close the modal
-        var modal = document.getElementById("myModal");
-        modal.style.display = "none";
-      } else {
-        // document.getElementById("response").innerHTML =
-        //   "Error retrieving response from server"; TODO
-      }
-    }
-  };
-  req.send(bodyStr);
-  return req;
-};
+
+  let promise = await fetch(url + "edit/", {
+    method: "POST",
+    headers: { "Content-type": "application/json" },
+    body: bodyStr,
+  })
+    .then((req) => req.json())
+    .then((customers) => {
+      window.sessionStorage.setItem("customers", JSON.stringify(customers));
+      //refresh the table
+      fillTable(customers);
+      //close the modal
+      var modal = document.getElementById("myModal");
+      modal.style.display = "none";
+    });
+}
 
 onEditSubmit = (id) => {
   let x = document.getElementById("edit_form").getElementsByTagName("input");
