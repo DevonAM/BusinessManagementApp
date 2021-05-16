@@ -33,7 +33,7 @@ router.post("/edit", function (req, res, next) {
 /* POST a new customer. */
 router.post("/add", function (req, res, next) {
   //Create object from the req.body
-  let newObj = JSON.parse(Object.keys(req.body)[0]);
+  let newObj = req.body; //JSON.parse(Object.keys(req.body)[0]);
   //write new customer to file
   writeCustomers(newObj);
   //send updated customers list
@@ -85,7 +85,7 @@ router.get("/search/:name", (req, res, next) => {
 /* POST delete a customer */
 router.delete("/", (req, res, next) => {
   //use the hacky way to get the object to delete
-  let objToDel = JSON.parse(Object.keys(req.body)[0]);
+  let objToDel = req.body; //JSON.parse(Object.keys(req.body)[0]);
   //refresh the collection
   customers = JSON.parse(fs.readFileSync(cF));
 
