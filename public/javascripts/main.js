@@ -3,6 +3,12 @@
  * @description A business customer management web application.
  * @version 1.0 April
  */
+const reqOb = {
+  method: "GET",
+  headers: { "Content-type": "application/json" },
+};
+
+let url = "http://localhost:8008/";
 
 onAddClick = () => {
   loadAddPage();
