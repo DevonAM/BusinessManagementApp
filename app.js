@@ -7,7 +7,7 @@ var logger = require("morgan");
 /**
  * @author Devon Acree-Meza
  * @description A server for the business customer management web application.
- * @version 1.0 April
+ * @version 1.1 May
  */
 
 var indexRouter = require("./routes/index");

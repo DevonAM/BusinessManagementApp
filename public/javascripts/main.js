@@ -1,7 +1,7 @@
 /**
  * @author Devon Acree-Meza
  * @description A business customer management web application.
- * @version 1.0 April
+ * @version 1.1 May
  */
 const reqOb = {
   method: "GET",
@@ -92,32 +92,26 @@ addSubmitted = () => {
 };
 
 //send the POST request for an add
-sendAdd = (obj) => {
+async function sendAdd(obj) {
   let bodyStr = JSON.stringify(obj);
-  //create request for a post
-  let req = new XMLHttpRequest();
-  req.open("POST", "/add");
-  req.setRequestHeader("Content-type", "application/json");
-  req.onreadystatechange = function () {
-    if (req.readyState === 4) {
-      if (req.status === 200) {
-        //store the new collection to session
-        let customers = JSON.parse(req.responseText);
-        window.sessionStorage.setItem("customers", JSON.stringify(customers));
-        //show the home page
-        let x = document.getElementById("content");
-        x.innerHTML = window.sessionStorage.getItem("home");
-        //refresh the table
-        fillTable(customers);
-      } else {
-        // document.getElementById("response").innerHTML =
-        //   "Error retrieving response from server"; TODO
-      }
-    }
-  };
-  req.send(bodyStr);
-  return req;
-};
+
+  let promise = await fetch(url + "add/", {
+    method: "POST",
+    body: bodyStr,
+    headers: { "Content-type": "application/json" },
+  })
+    .then((res) => res.json())
+    .then((customers) => {
+      //store the new collection to session
+      window.sessionStorage.setItem("customers", JSON.stringify(customers));
+      //show the home page
+      let x = document.getElementById("content");
+      x.innerHTML = window.sessionStorage.getItem("home");
+      //refresh the table
+      fillTable(customers);
+    })
+    .catch((err) => console.log(err));
+}
 
 historyHelper = (history) => {
   let s = "<div>";
@@ -337,7 +331,7 @@ fillTable = (customers) => {
 };
 
 async function getCustomers() {
-  let promise = await fetch(url + "customerData", reqOb)
+  let promise = await fetch(url + "customerData/", reqOb)
     .then((res) => res.json())
     .then((customers) => {
       window.sessionStorage.setItem("customers", JSON.stringify(customers));
