@@ -105,10 +105,7 @@ async function sendAdd(obj) {
       //store the new collection to session
       window.sessionStorage.setItem("customers", JSON.stringify(customers));
       //show the home page
-      let x = document.getElementById("content");
-      x.innerHTML = window.sessionStorage.getItem("home");
-      //refresh the table
-      fillTable(customers);
+      loadHome();
     })
     .catch((err) => console.log(err));
 }
