@@ -113,6 +113,11 @@ async function sendAdd(obj) {
 historyHelper = (history) => {
   let s = "<div>";
   let h = Object.keys(history);
+  //append history elements to html string
+  let [m, d, y] = new Date().toLocaleDateString().split("/");
+  m = m < 10 ? 0 + m : m;
+  d = d < 10 ? 0 + d : d;
+  var date = y + "-" + m + "-" + d;
   h.forEach((e) => {
     let t = e.toString();
     s += t + ": " + history[t] + "<br />";
